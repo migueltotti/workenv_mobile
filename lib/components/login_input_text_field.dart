@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class InputTextField extends StatefulWidget {
-  const InputTextField({super.key, required this.inputName});
+class LoginInputTextField extends StatefulWidget {
+  const LoginInputTextField({super.key, required this.inputName});
 
   final String inputName;
 
   @override
-  State<InputTextField> createState() => _InputTextFieldState();
+  State<LoginInputTextField> createState() => _LoginInputTextFieldState();
 }
 
-class _InputTextFieldState extends State<InputTextField> {
+class _LoginInputTextFieldState extends State<LoginInputTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(

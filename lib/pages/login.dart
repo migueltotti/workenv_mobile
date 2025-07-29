@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:work_env_mobile/components/input_text_field.dart';
+import 'package:work_env_mobile/components/login_input_text_field.dart';
 import 'package:work_env_mobile/components/social_media_icon_button.dart';
+import 'package:work_env_mobile/pages/create_account.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -35,9 +36,9 @@ class _LoginState extends State<Login> {
             ),
           ),
           SizedBox(height: 20),
-          InputTextField(inputName: 'Email'),
+          LoginInputTextField(inputName: 'Email'),
           SizedBox(height: 12),
-          InputTextField(inputName: 'Password'),
+          LoginInputTextField(inputName: 'Password'),
           SizedBox(height: 6),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -46,10 +47,10 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 35, 0),
                 child: Text(
                   'forgot your password?',
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.poppins(
                     color: const Color.fromRGBO(74, 166, 240, 1),
                     fontWeight: FontWeight.w500,
-                    fontSize: 13,
+                    fontSize: 11,
                     decoration: TextDecoration.underline,
                     decorationThickness: 2,
                     decorationColor: const Color.fromRGBO(74, 166, 240, 1),
@@ -122,12 +123,42 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-          SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          //SizedBox(height: 15),
+          Stack(
+            alignment: Alignment.bottomCenter,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'don`t have an account?',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/create-account');
+                    },
+                    child: Text(
+                      'create one!',
+                      style: GoogleFonts.poppins(
+                        color: const Color.fromRGBO(74, 166, 240, 1),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                        decoration: TextDecoration.underline,
+                        decorationThickness: 2,
+                        decorationColor: const Color.fromRGBO(74, 166, 240, 1),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Text(
-                'don`t have an account?',
+                'or sign in with other plataformt',
                 style: GoogleFonts.poppins(
                   color: Colors.black,
                   fontSize: 13,
@@ -135,28 +166,7 @@ class _LoginState extends State<Login> {
                   decoration: TextDecoration.none,
                 ),
               ),
-              SizedBox(width: 4),
-              Text(
-                'create one!',
-                style: GoogleFonts.poppins(
-                  color: const Color.fromRGBO(74, 166, 240, 1),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 13,
-                  decoration: TextDecoration.underline,
-                  decorationThickness: 2,
-                  decorationColor: const Color.fromRGBO(74, 166, 240, 1),
-                ),
-              ),
             ],
-          ),
-          Text(
-            'or sign in with other plataformt',
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 13,
-              fontWeight: FontWeight.normal,
-              decoration: TextDecoration.none,
-            ),
           ),
           SizedBox(height: 15),
           Row(
