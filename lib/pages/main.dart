@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:work_env_mobile/pages/create_account.dart';
-import 'package:work_env_mobile/pages/home.dart';
-import 'package:work_env_mobile/pages/login.dart';
+import 'package:work_env_mobile/pages/create_account_page.dart';
+import 'package:work_env_mobile/pages/home_page.dart';
+import 'package:work_env_mobile/pages/login_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -19,13 +19,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(textTheme: GoogleFonts.spaceGroteskTextTheme()),
-      home: const Login(),
+      home: const LoginPage(),
       routes: {
         '/my-home-page':
             (context) => MyHomePage(title: 'Flutter Demo Home Page'),
-        '/home-page': (context) => HomePage(),
-        '/login': (context) => Login(),
-        '/create-account': (context) => CreateAccount(),
+        '/home': (context) => HomePage(),
+        '/login': (context) => LoginPage(),
+        '/create-account': (context) => CreateAccountPage(),
       },
     );
   }

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class LoginInputTextField extends StatefulWidget {
   const LoginInputTextField({super.key, required this.inputName});
 
+  // TODO: Add controller, validator and isObscureText properties initialized by the contructor.
   final String inputName;
 
   @override
@@ -26,6 +27,7 @@ class _LoginInputTextFieldState extends State<LoginInputTextField> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
           child: TextField(
+            // TODO: Replace with TextFormField
             cursorRadius: Radius.circular(5),
             maxLines: 1,
             decoration: InputDecoration(

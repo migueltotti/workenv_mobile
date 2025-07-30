@@ -3,23 +3,22 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:work_env_mobile/components/login_input_text_field.dart';
 import 'package:work_env_mobile/components/social_media_icon_button.dart';
-import 'package:work_env_mobile/pages/create_account.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginPageState extends State<LoginPage> {
   bool rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Column(
+      child: Column( // TODO: Add Form widget and update LoginInputTextField to use it.
         children: [
           Image.asset(
             'assets/images/login_page_img_white_theme.png',
