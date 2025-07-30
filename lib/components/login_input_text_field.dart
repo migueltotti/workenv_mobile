@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginInputTextField extends StatefulWidget {
-  const LoginInputTextField({super.key, required this.inputName});
+  const LoginInputTextField({
+    super.key,
+    required this.inputName,
+    required this.controller,
+    required this.isObscureText,
+    this.validator,
+  });
 
-  // TODO: Add controller, validator and isObscureText properties initialized by the contructor.
+  final TextEditingController controller;
+  final bool isObscureText;
+  final String? Function(String?)? validator;
   final String inputName;
 
   @override
@@ -26,8 +34,10 @@ class _LoginInputTextFieldState extends State<LoginInputTextField> {
         color: Color.fromRGBO(74, 166, 240, 0.25),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-          child: TextField(
-            // TODO: Replace with TextFormField
+          child: TextFormField(
+            controller: widget.controller,
+            obscureText: widget.isObscureText,
+            validator: widget.validator,
             cursorRadius: Radius.circular(5),
             maxLines: 1,
             decoration: InputDecoration(
