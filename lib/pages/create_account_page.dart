@@ -70,32 +70,36 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       body: Form(
         // TODO: learn about Form and how to customize the error messages.
         key: form,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 30),
           children: [
-            Text(
-              'Create Account',
-              style: GoogleFonts.spaceGrotesk(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 36,
-                letterSpacing: -0.5,
-                decoration: TextDecoration.none,
-              ),
-            ),
-            SizedBox(height: 20),
-            SizedBox(
-              width: 230,
+            Center(
               child: Text(
-                'Start organizing your routine the way you`ve always wanted.',
-                style: GoogleFonts.inter(
+                'Create Account',
+                style: GoogleFonts.spaceGrotesk(
                   color: Colors.black,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 36,
                   letterSpacing: -0.5,
                   decoration: TextDecoration.none,
                 ),
-                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(height: 20),
+            Center(
+              child: SizedBox(
+                width: 230,
+                child: Text(
+                  'Start organizing your routine the way you`ve always wanted.',
+                  style: GoogleFonts.inter(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 16,
+                    letterSpacing: -0.5,
+                    decoration: TextDecoration.none,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
             SizedBox(height: 10),
@@ -135,7 +139,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               children: [
                 CreateAccountInputText(
                   inputName: 'Password *',
-                  width: 325,
+                  width: 335,
                   height: 72,
                   isTextObscure: !isPasswordVisible,
                   controller: _passwordController,
@@ -168,7 +172,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
             SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CreateAccountInputText(
                   inputName: 'Date birth',
@@ -199,6 +203,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               width: 325,
               height: 116,
               isTextObscure: false,
+              isMultiline: true,
               controller: _descriptionController,
               validator: (about) {
                 if ((about != null || about!.isNotEmpty) && about.length < 30)
@@ -218,7 +223,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     borderRadius: BorderRadius.circular(11),
                   ),
                 ),
-                onPressed: () => _sendForms(),
+                onPressed: () => {
+                  _sendForms(),
+                  dispose(),
+                },
                 child: Text(
                   'Sign in',
                   style: GoogleFonts.poppins(

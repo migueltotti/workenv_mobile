@@ -10,6 +10,7 @@ class CreateAccountInputText extends StatelessWidget {
     required this.isTextObscure,
     required this.controller,
     required this.validator,
+    this.isMultiline = false,
     this.keyboardType = TextInputType.text,
   });
 
@@ -17,12 +18,55 @@ class CreateAccountInputText extends StatelessWidget {
   final double width;
   final double height;
   final bool isTextObscure;
+  final bool isMultiline;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
 
   final double titleHeight = 22;
   final double titleAndTextFieldSpacing = 1;
+
+  Widget getInputField() {
+    Widget inputField;
+
+    if (isMultiline) {
+      inputField = SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: TextFormField(
+          controller: controller,
+          validator: validator,
+          obscureText: isTextObscure,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          minLines: 1,
+          cursorRadius: Radius.circular(5),
+          decoration: InputDecoration(border: InputBorder.none),
+          style: GoogleFonts.poppins(
+            fontSize: 14,
+            color: Color.fromRGBO(13, 27, 52, 1),
+          ),
+          cursorColor: Color.fromRGBO(13, 27, 52, 1),
+        ),
+      );
+    } else {
+      inputField = TextFormField(
+        controller: controller,
+        validator: validator,
+        obscureText: isTextObscure,
+        keyboardType: keyboardType,
+        maxLines: 1,
+        cursorRadius: Radius.circular(5),
+        decoration: InputDecoration(border: InputBorder.none),
+        style: GoogleFonts.poppins(
+          fontSize: 14,
+          color: Color.fromRGBO(13, 27, 52, 1),
+        ),
+        cursorColor: Color.fromRGBO(13, 27, 52, 1),
+      );
+    }
+
+    return inputField;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +84,7 @@ class CreateAccountInputText extends StatelessWidget {
             inputName,
             style: GoogleFonts.poppins(
               color: Color.fromRGBO(13, 27, 52, 0.75),
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.normal,
               decoration: TextDecoration.none,
             ),
@@ -52,19 +96,7 @@ class CreateAccountInputText extends StatelessWidget {
               color: Color.fromRGBO(74, 166, 240, 0.25),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                child: TextFormField(
-                  controller: controller,
-                  validator: validator,
-                  obscureText: isTextObscure,
-                  keyboardType: keyboardType,
-                  cursorRadius: Radius.circular(5),
-                  decoration: InputDecoration(border: InputBorder.none),
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: Color.fromRGBO(13, 27, 52, 1),
-                  ),
-                  cursorColor: Color.fromRGBO(13, 27, 52, 1),
-                ),
+                child: getInputField(),
               ),
             ),
           ),
