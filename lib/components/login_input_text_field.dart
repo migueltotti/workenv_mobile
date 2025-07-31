@@ -45,13 +45,13 @@ class _LoginInputTextFieldState extends State<LoginInputTextField> {
               label: Text(
                 widget.inputName,
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 20,
+                  fontSize: 16,
                   color: Color.fromRGBO(13, 27, 52, 0.5),
                 ),
               ),
             ),
             style: GoogleFonts.poppins(
-              fontSize: 16,
+              fontSize: 14,
               color: Color.fromRGBO(13, 27, 52, 1),
             ),
             cursorColor: Color.fromRGBO(13, 27, 52, 1),

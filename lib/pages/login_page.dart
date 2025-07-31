@@ -19,12 +19,14 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isPasswordVisible = false;
-
+  bool isFormValid = true;
   double _rightPosition = 6.0;
-  double _topPosition = 5.0;
+  final double _topPosition = 5.0;
 
   void _signIn() {
-    if (_formKey.currentState?.validate() ?? false) {
+    isFormValid = _formKey.currentState?.validate() ?? false;
+
+    if (isFormValid) {
       // Handle login logic here
       log('Form is valid, sending data...');
       log('Email: ${emailController.text}');
@@ -38,6 +40,8 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.dispose();
     super.dispose();
   }
+
+  // TODO: Study the possibility to get the validation error messages from the Form and create a another widget to display it.
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
               isObscureText: false,
               validator: (value) {
                 if (value == null || value.isEmpty || !value.contains('@')) {
-                  return 'Please enter your email';
+                  return 'Please enter a valid email';
                 }
 
                 return null;
@@ -83,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   isObscureText: !isPasswordVisible,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Please enter a valid password';
                     }
                     return null;
                   },
@@ -97,11 +101,12 @@ class _LoginPageState extends State<LoginPage> {
                           ? FontAwesomeIcons.eyeSlash
                           : FontAwesomeIcons.eye,
                       color: Color.fromRGBO(13, 27, 52, 1),
+                      size: 20.0,
                     ),
                     onPressed: () {
                       setState(() {
                         isPasswordVisible = !isPasswordVisible;
-                        _rightPosition = isPasswordVisible ? 8.5 : 7.0;
+                        _rightPosition = isPasswordVisible ? 8.0 : 7.0;
                       });
                     },
                   ),
