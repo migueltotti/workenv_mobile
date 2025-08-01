@@ -31,6 +31,8 @@ class _LoginPageState extends State<LoginPage> {
       log('Form is valid, sending data...');
       log('Email: ${emailController.text}');
       log('Password: ${passwordController.text}');
+
+      Navigator.of(context).pushReplacementNamed('/home');
     }
   }
 
@@ -124,9 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                     style: GoogleFonts.poppins(
                       color: const Color.fromRGBO(74, 166, 240, 1),
                       fontWeight: FontWeight.w500,
-                      fontSize: 11,
+                      fontSize: 12,
                       decoration: TextDecoration.underline,
-                      decorationThickness: 2,
+                      decorationThickness: 1,
                       decorationColor: const Color.fromRGBO(74, 166, 240, 1),
                     ),
                   ),
