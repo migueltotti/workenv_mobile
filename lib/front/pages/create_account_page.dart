@@ -5,7 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:work_env_mobile/components/create_account_input_text.dart';
+import 'package:work_env_mobile/front/components/create_account_input_text.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});

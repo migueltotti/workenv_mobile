@@ -3,8 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:work_env_mobile/components/login_input_text_field.dart';
-import 'package:work_env_mobile/components/social_media_icon_button.dart';
+import 'package:work_env_mobile/depency_injection_config/dependency_injection.dart';
+import 'package:work_env_mobile/front/components/login_input_text_field.dart';
+import 'package:work_env_mobile/front/components/social_media_icon_button.dart';
+import 'package:work_env_mobile/services/auth_service.dart';
+import 'package:work_env_mobile/services/encrypt_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,7 +26,12 @@ class _LoginPageState extends State<LoginPage> {
   double _rightPosition = 6.0;
   final double _topPosition = 5.0;
 
-  void _signIn() {
+  String _encryptedPassword = '';
+
+  final authService = locator<AuthService>();
+  final encryptService = locator<EncryptService>();
+
+  void _signIn() async {
     isFormValid = _formKey.currentState?.validate() ?? false;
 
     if (isFormValid) {
@@ -32,7 +40,18 @@ class _LoginPageState extends State<LoginPage> {
       log('Email: ${emailController.text}');
       log('Password: ${passwordController.text}');
 
-      Navigator.of(context).pushReplacementNamed('/home');
+      // perform login request with AuthService
+      _encryptedPassword = encryptService.encrypt(passwordController.text);
+
+      //log(_encryptedPassword);
+      var response = await authService.login(emailController.text, _encryptedPassword);
+
+      if (response.statusCode == 200) {
+        Navigator.of(context).pushReplacementNamed('/home');
+      } else {
+        log('Login failed with status: ${response.statusCode}');
+        log('response data: ${response.data}');
+      }
     }
   }
 
