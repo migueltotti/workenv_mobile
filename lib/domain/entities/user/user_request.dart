@@ -1,6 +1,6 @@
 import 'package:work_env_mobile/domain/enums/privacy.dart';
 
-class RequestUser {
+class UserRequest {
   String name;
   String email;
   String password;
@@ -10,7 +10,7 @@ class RequestUser {
   String personalDescription;
   Privacy privacy;
 
-  RequestUser({
+  UserRequest({
     required this.name,
     required this.email,
     required this.password,
@@ -21,8 +21,8 @@ class RequestUser {
     required this.privacy,
   });
 
-  factory RequestUser.fromJson(Map<String, dynamic> json) {
-    return RequestUser(
+  factory UserRequest.fromJson(Map<String, dynamic> json) {
+    return UserRequest(
       name: json['name'] as String,
       email: json['email'] as String,
       password: json['password'] as String,

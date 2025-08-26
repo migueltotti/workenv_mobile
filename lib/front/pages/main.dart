@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(textTheme: GoogleFonts.spaceGroteskTextTheme()),
-      home: const LoginPage(),
+      home: const CreateAccountPage(),
       routes: {
         '/home': (context) => HomePage(),
         '/login': (context) => LoginPage(),

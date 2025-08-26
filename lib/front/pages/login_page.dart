@@ -35,22 +35,21 @@ class _LoginPageState extends State<LoginPage> {
     isFormValid = _formKey.currentState?.validate() ?? false;
 
     if (isFormValid) {
-      // Handle login logic here
       log('Form is valid, sending data...');
       log('Email: ${emailController.text}');
       log('Password: ${passwordController.text}');
 
-      // perform login request with AuthService
       _encryptedPassword = encryptService.encrypt(passwordController.text);
 
-      //log(_encryptedPassword);
       var response = await authService.login(emailController.text, _encryptedPassword);
 
-      if (response.statusCode == 200) {
+      // Check if the widget have been disposed before accessing the context.
+      if(!mounted) return;
+
+      if (response.isSuccess) {
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
-        log('Login failed with status: ${response.statusCode}');
-        log('response data: ${response.data}');
+        log('Login failed with status: ${response.error}');
       }
     }
   }

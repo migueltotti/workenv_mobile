@@ -3,8 +3,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:work_env_mobile/domain/text_formatters/cpf_cnpj_formatter.dart';
+import 'package:work_env_mobile/domain/text_formatters/date_formater.dart';
 import 'package:work_env_mobile/front/components/create_account_input_text.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -19,12 +22,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final form = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _cpjOrCnpjController = TextEditingController();
   final _passwordController = TextEditingController();
   final _dateBirthController = TextEditingController();
   final _profilePictureController = TextEditingController();
   final _descriptionController = TextEditingController();
 
-  final passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,30}$');
+  final _passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,30}$');
+  final _cpfCnpjRegex = RegExp(
+    r'^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})$',
+  );
 
   void _sendForms() {
     if (form.currentState!.validate()) {
@@ -60,6 +67,27 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     _profilePictureController.dispose();
     _descriptionController.dispose();
     super.dispose();
+  }
+
+  final _dataSeletorController = TextEditingController();
+
+  Future<void> _selecionarData(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+      locale: Locale('pt', 'BR'), // Português brasileiro
+    );
+
+    if (picked != null) {
+      setState(() {
+        _dataSeletorController.text =
+            '${picked.day.toString().padLeft(2, '0')}/'
+            '${picked.month.toString().padLeft(2, '0')}/'
+            '${picked.year}';
+      });
+    }
   }
 
   @override
@@ -146,7 +174,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   validator: (pw) {
                     if (pw == null || pw.isEmpty)
                       return 'Password must be not null or empty';
-                    if (!passwordRegex.hasMatch(pw)) {
+                    if (!_passwordRegex.hasMatch(pw)) {
                       return 'Password must be 8-30 chars, include upper, lower, and special character';
                     }
                     return null;
@@ -171,6 +199,22 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               ],
             ),
             SizedBox(height: 10),
+            CreateAccountInputText(
+              inputName: 'CPF or CNPJ *',
+              width: 325,
+              height: 72,
+              isTextObscure: false,
+              controller: _cpjOrCnpjController,
+              validator: (cpfOrCnpj) {
+                if (cpfOrCnpj == null || cpfOrCnpj.isEmpty)
+                  return 'Cpf or Cnpj must be not null or empty!';
+                if (!_cpfCnpjRegex.hasMatch(cpfOrCnpj))
+                  return 'Cpf or Cnpj must be in the corret format!';
+                return null;
+              },
+              formaters: [CpfCnpjFormatter()],
+            ),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -179,11 +223,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   width: 150,
                   height: 72,
                   isTextObscure: false,
-                  keyboardType: TextInputType.datetime,
+                  keyboardType: TextInputType.number,
                   controller: _dateBirthController,
                   validator: (date) {
                     return null;
                   },
+                  formaters: [DateFormatter()],
                 ),
                 CreateAccountInputText(
                   inputName: 'Profile picture',
@@ -223,10 +268,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     borderRadius: BorderRadius.circular(11),
                   ),
                 ),
-                onPressed: () => {
-                  _sendForms(),
-                  dispose(),
-                },
+                onPressed: () => {_sendForms(), dispose()},
                 child: Text(
                   'Sign in',
                   style: GoogleFonts.poppins(

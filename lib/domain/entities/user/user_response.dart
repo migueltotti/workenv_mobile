@@ -1,11 +1,11 @@
-class ResponseUser {
+class UserResponse {
   String userId;
   String name;
   String email;
   String cpfCnpj;
   DateTime dateBirth;
 
-  ResponseUser({
+  UserResponse({
     required this.userId,
     required this.name,
     required this.email,
@@ -13,8 +13,8 @@ class ResponseUser {
     required this.dateBirth,
   });
 
-  factory ResponseUser.fromJson(Map<String, dynamic> json) {
-    return ResponseUser(
+  factory UserResponse.fromJson(Map<String, dynamic> json) {
+    return UserResponse(
       userId: json['userId'] as String,
       name: json['name'] as String,
       email: json['email'] as String,

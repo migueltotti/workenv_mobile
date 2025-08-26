@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CreateAccountInputText extends StatelessWidget {
@@ -12,6 +13,7 @@ class CreateAccountInputText extends StatelessWidget {
     required this.validator,
     this.isMultiline = false,
     this.keyboardType = TextInputType.text,
+    this.formaters,
   });
 
   final String inputName;
@@ -22,12 +24,14 @@ class CreateAccountInputText extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
+  final List<TextInputFormatter>? formaters;
 
   final double titleHeight = 22;
   final double titleAndTextFieldSpacing = 1;
 
   Widget getInputField() {
     Widget inputField;
+    final inputFormatters = formaters ?? <TextInputFormatter>[];
 
     if (isMultiline) {
       inputField = SingleChildScrollView(
@@ -46,6 +50,7 @@ class CreateAccountInputText extends StatelessWidget {
             color: Color.fromRGBO(13, 27, 52, 1),
           ),
           cursorColor: Color.fromRGBO(13, 27, 52, 1),
+          inputFormatters: inputFormatters,
         ),
       );
     } else {
@@ -62,6 +67,7 @@ class CreateAccountInputText extends StatelessWidget {
           color: Color.fromRGBO(13, 27, 52, 1),
         ),
         cursorColor: Color.fromRGBO(13, 27, 52, 1),
+        inputFormatters: inputFormatters,
       );
     }
 

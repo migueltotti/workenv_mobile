@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:work_env_mobile/domain/result/result.dart';
 
 class AuthService {
   static String? token;
@@ -38,7 +39,7 @@ class AuthService {
     refreshTokenExpireAt = null;
   }
 
-  Future<Response> login(String email, String encryptedPassword) async {
+  Future<ResultVoid> login(String email, String encryptedPassword) async {
     final response = await _api.post('/Auth/login', data: {
       'email': email,
       'password': encryptedPassword,
@@ -47,11 +48,10 @@ class AuthService {
     if (response.statusCode == 200) {
       setToken(response.data['accessToken']);
       setRefreshToken(response.data['refreshToken'], DateTime.parse(response.data['refreshTokenExpiresAt']));
+      return ResultVoid.success();
     } else {
-      throw Exception('Failed to login');
+      return ResultVoid.failure(error: response.data);
     }
-
-    return response;
   }
 
   void logout() {
