@@ -3,9 +3,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:work_env_mobile/domain/enums/privacy.dart';
 import 'package:work_env_mobile/domain/text_formatters/cpf_cnpj_formatter.dart';
 import 'package:work_env_mobile/domain/text_formatters/date_formater.dart';
 import 'package:work_env_mobile/front/components/create_account_input_text.dart';
@@ -27,6 +27,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final _dateBirthController = TextEditingController();
   final _profilePictureController = TextEditingController();
   final _descriptionController = TextEditingController();
+  Privacy accountPrivacy = Privacy.public;
 
   final _passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,30}$');
   final _cpfCnpjRegex = RegExp(
@@ -67,27 +68,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     _profilePictureController.dispose();
     _descriptionController.dispose();
     super.dispose();
-  }
-
-  final _dataSeletorController = TextEditingController();
-
-  Future<void> _selecionarData(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-      locale: Locale('pt', 'BR'), // Português brasileiro
-    );
-
-    if (picked != null) {
-      setState(() {
-        _dataSeletorController.text =
-            '${picked.day.toString().padLeft(2, '0')}/'
-            '${picked.month.toString().padLeft(2, '0')}/'
-            '${picked.year}';
-      });
-    }
   }
 
   @override
@@ -230,17 +210,65 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   },
                   formaters: [DateFormatter()],
                 ),
-                CreateAccountInputText(
-                  inputName: 'Profile picture',
-                  width: 150,
-                  height: 72,
-                  isTextObscure: false,
-                  controller: _profilePictureController,
-                  validator: (image) {
-                    return null;
-                  },
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Privacy',
+                      style: GoogleFonts.poppins(
+                        color: Color.fromRGBO(13, 27, 52, 0.65),
+                        fontSize: 15,
+                        fontWeight: FontWeight.normal,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      width: 170,
+                      height: 51,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        color: Color.fromRGBO(74, 166, 240, 0.25),
+                      ),
+                      child: DropdownButton<String>(
+                        underline: Container(),
+                        value: accountPrivacy.toString(),
+                        menuWidth: 170,
+                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        elevation: 3,
+                        alignment: AlignmentDirectional.centerEnd,
+                        icon: Icon(Icons.arrow_drop_down_sharp, size: 30),
+                        items:
+                            <String>[
+                              'public',
+                              'private',
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value.toString()),
+                              );
+                            }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            accountPrivacy = Privacy.fromStringValue(newValue!);
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
+            ),
+            SizedBox(height: 10),
+            CreateAccountInputText(
+              inputName: 'Profile picture',
+              width: 325,
+              height: 72,
+              isTextObscure: false,
+              controller: _profilePictureController,
+              validator: (image) {
+                return null;
+              },
             ),
             SizedBox(height: 10),
             CreateAccountInputText(

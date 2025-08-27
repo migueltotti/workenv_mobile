@@ -30,7 +30,7 @@ class UserRequest {
       dateBirth: DateTime.parse(json['dateBirth'] as String),
       profilePicture: json['profilePicture'] as String,
       personalDescription: json['personalDescription'] as String,
-      privacy: Privacy.fromValue(json['privacy'] as int),
+      privacy: Privacy.fromIntValue(json['privacy'] as int),
     );
   }
 

@@ -89,7 +89,7 @@ class CreateAccountInputText extends StatelessWidget {
           Text(
             inputName,
             style: GoogleFonts.poppins(
-              color: Color.fromRGBO(13, 27, 52, 0.75),
+              color: Color.fromRGBO(13, 27, 52, 0.65),
               fontSize: 15,
               fontWeight: FontWeight.normal,
               decoration: TextDecoration.none,
