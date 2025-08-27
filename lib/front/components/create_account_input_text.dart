@@ -10,7 +10,7 @@ class CreateAccountInputText extends StatelessWidget {
     required this.height,
     required this.isTextObscure,
     required this.controller,
-    required this.validator,
+    this.errorText = null,
     this.isMultiline = false,
     this.keyboardType = TextInputType.text,
     this.formaters,
@@ -22,7 +22,7 @@ class CreateAccountInputText extends StatelessWidget {
   final bool isTextObscure;
   final bool isMultiline;
   final TextEditingController controller;
-  final String? Function(String?)? validator;
+  final String? errorText;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? formaters;
 
@@ -38,7 +38,6 @@ class CreateAccountInputText extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: TextFormField(
           controller: controller,
-          validator: validator,
           obscureText: isTextObscure,
           keyboardType: TextInputType.multiline,
           maxLines: null,
@@ -56,7 +55,6 @@ class CreateAccountInputText extends StatelessWidget {
     } else {
       inputField = TextFormField(
         controller: controller,
-        validator: validator,
         obscureText: isTextObscure,
         keyboardType: keyboardType,
         maxLines: 1,
@@ -74,11 +72,30 @@ class CreateAccountInputText extends StatelessWidget {
     return inputField;
   }
 
+  Widget showInputError() {
+    if (errorText != null) {
+      return Padding(
+        padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+        child: Text(
+          errorText!,
+          style: GoogleFonts.poppins(color: Colors.redAccent, fontSize: 12),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height,
+      height:
+          errorText == null
+              ? height
+              : errorText!.length <= 35
+              ? height + 15
+              : height + 32,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(7)),
         color: Colors.white,
@@ -101,11 +118,12 @@ class CreateAccountInputText extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(7)),
               color: Color.fromRGBO(74, 166, 240, 0.25),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                 child: getInputField(),
               ),
             ),
           ),
+          showInputError(),
         ],
       ),
     );
