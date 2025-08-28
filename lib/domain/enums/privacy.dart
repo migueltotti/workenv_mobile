@@ -9,10 +9,14 @@ enum Privacy {
 
   // Get the Privacy from its integer value
   static Privacy fromIntValue(int value) {
-    return Privacy.values.firstWhere(
-      (e) => e.value == value, 
-      orElse: () => throw ArgumentError("Invalid Privacy: $value"),
-    );
+    switch (value) {
+      case 1:
+        return Privacy.public;
+      case 2:
+        return Privacy.private;
+      default:
+        throw ArgumentError('Invalid privacy value: $value');
+    }
   }
 
   static Privacy fromStringValue(String value) {
@@ -23,7 +27,7 @@ enum Privacy {
     return privacyStringMap[value] ?? Privacy.public;
   }
 
-  int toJson() => value;
+  int toStringValue() => value;
 
   @override
   String toString(){

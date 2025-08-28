@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   String _encryptedPassword = '';
 
   final authService = locator<AuthService>();
-  final encryptService = locator<EncryptService>();
+  final encryptService = locator<CryptoService>();
 
   void _signIn() async {
     isFormValid = _formKey.currentState?.validate() ?? false;
@@ -41,10 +41,13 @@ class _LoginPageState extends State<LoginPage> {
 
       _encryptedPassword = encryptService.encrypt(passwordController.text);
 
-      var response = await authService.login(emailController.text, _encryptedPassword);
+      var response = await authService.login(
+        emailController.text,
+        _encryptedPassword,
+      );
 
       // Check if the widget have been disposed before accessing the context.
-      if(!mounted) return;
+      if (!mounted) return;
 
       if (response.isSuccess) {
         Navigator.of(context).pushReplacementNamed('/home');

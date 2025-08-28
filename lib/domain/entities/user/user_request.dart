@@ -43,7 +43,7 @@ class UserRequest {
       "dateBirth": dateBirth.toIso8601String(),
       "profilePicture": profilePicture,
       "personalDescription": personalDescription,
-      "privacy": privacy.toJson(),
+      "privacy": privacy.value,
     };
   }
 }

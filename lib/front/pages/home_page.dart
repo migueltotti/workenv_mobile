@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          const SizedBox(height: 30),
+          const SizedBox(height: 40),
           Container(
             width: double.infinity,
             height: 70,

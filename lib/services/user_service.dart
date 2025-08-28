@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:work_env_mobile/domain/entities/user/change_birth_date_request.dart';
 import 'package:work_env_mobile/domain/entities/user/change_email_request.dart';
@@ -30,7 +33,7 @@ class UserService {
 
   Future<Result<UserResponse>> getUserByEmail(String email) async {
     final response = await api.get('$_baseUrl/?userEmail=$email');
-    
+
     return response.statusCode! < 400
         ? Result.success(value: UserResponse.fromJson(response.data))
         : Result.failure(error: response.data);
@@ -44,7 +47,7 @@ class UserService {
         : Result.failure(error: response.data);
   }
 
-  Future<Result<UserResponse>> registerUser(UserRequest user) async {
+  Future<Result<UserResponse>> createUser(UserRequest user) async {
     final response = await api.post(_baseUrl, data: user.toJson());
 
     return response.statusCode! < 400
@@ -52,32 +55,94 @@ class UserService {
         : Result.failure(error: response.data);
   }
 
-  Future<Result<UserResponse>> changeName(String userId, ChangeUserName user) async {
-    final response = await api.put('$_baseUrl/changeName/$userId', data: user.toJson());
+  Future<dynamic> createUserVoid(UserRequest user) async {
+    try {
+    // Teste com dados hardcoded simples
+      final simpleData = {
+        "name": "Test",
+        "email": "test@test.com", 
+        "password": "123",
+        "cpfCnpj": "123",
+        "dateBirth": "2025-01-01T00:00:00.000Z",
+        "profilePicture": "test",
+        "personalDescription": "test",
+        "privacy": 1
+      };
+      
+      log("Testing with simple data: $simpleData");
+      
+      final response = await api.post(_baseUrl, data: simpleData);
+      log("SUCCESS with simple data");
+      
+    } catch (e) {
+      log("ERROR with simple data: $e");
+    }
+  }
+
+  Future<void> testConnection() async {
+    try {
+      final response = await api.get<List>('/Users'); // ou qualquer rota GET
+      log("Connection test SUCCESS: ${response.statusCode}");
+    } catch (e) {
+      log("Connection test FAILED: $e");
+    }
+  }
+
+
+
+
+  
+
+  Future<Result<UserResponse>> changeName(
+    String userId,
+    ChangeUserName user,
+  ) async {
+    final response = await api.put(
+      '$_baseUrl/changeName/$userId',
+      data: user.toJson(),
+    );
 
     return response.statusCode! < 400
         ? Result.success(value: UserResponse.fromJson(response.data))
         : Result.failure(error: response.data);
   }
 
-  Future<Result<UserResponse>> changeEmail(String userId, ChangeUserEmail user) async {
-    final response = await api.put('$_baseUrl/changeEmail/$userId', data: user.toJson());
+  Future<Result<UserResponse>> changeEmail(
+    String userId,
+    ChangeUserEmail user,
+  ) async {
+    final response = await api.put(
+      '$_baseUrl/changeEmail/$userId',
+      data: user.toJson(),
+    );
 
     return response.statusCode! < 400
         ? Result.success(value: UserResponse.fromJson(response.data))
         : Result.failure(error: response.data);
   }
 
-  Future<Result<UserResponse>> changePassword(String userId, ChangeUserPassword user) async {
-    final response = await api.put('$_baseUrl/changePassword/$userId', data: user.toJson());
+  Future<Result<UserResponse>> changePassword(
+    String userId,
+    ChangeUserPassword user,
+  ) async {
+    final response = await api.put(
+      '$_baseUrl/changePassword/$userId',
+      data: user.toJson(),
+    );
 
     return response.statusCode! < 400
         ? Result.success(value: UserResponse.fromJson(response.data))
         : Result.failure(error: response.data);
   }
 
-  Future<Result<UserResponse>> changeBirthDate(String userId, ChangeBirthDate user) async {
-    final response = await api.put('$_baseUrl/changeBirthDate/$userId', data: user.toJson());
+  Future<Result<UserResponse>> changeBirthDate(
+    String userId,
+    ChangeBirthDate user,
+  ) async {
+    final response = await api.put(
+      '$_baseUrl/changeBirthDate/$userId',
+      data: user.toJson(),
+    );
 
     return response.statusCode! < 400
         ? Result.success(value: UserResponse.fromJson(response.data))
@@ -85,9 +150,13 @@ class UserService {
   }
 
   Future<Result<UserResponse>> changePersonalDescription(
-    String userId, ChangePersonalDescription user,
+    String userId,
+    ChangePersonalDescription user,
   ) async {
-    final response = await api.put('$_baseUrl/changePersonalDescription/$userId', data: user.toJson());
+    final response = await api.put(
+      '$_baseUrl/changePersonalDescription/$userId',
+      data: user.toJson(),
+    );
 
     return response.statusCode! < 400
         ? Result.success(value: UserResponse.fromJson(response.data))
@@ -95,17 +164,27 @@ class UserService {
   }
 
   Future<Result<UserResponse>> changeProfilePicture(
-    String userId, ChangeProfilePicture user,
+    String userId,
+    ChangeProfilePicture user,
   ) async {
-    final response = await api.put('$_baseUrl/changeProfilePicture/$userId', data: user.toJson());
+    final response = await api.put(
+      '$_baseUrl/changeProfilePicture/$userId',
+      data: user.toJson(),
+    );
 
     return response.statusCode! < 400
         ? Result.success(value: UserResponse.fromJson(response.data))
         : Result.failure(error: response.data);
   }
 
-  Future<Result<UserResponse>> changePrivacy(String userId, ChangeUserPrivacy user) async {
-    final response = await api.put('$_baseUrl/changePrivacy/$userId', data: user.toJson());
+  Future<Result<UserResponse>> changePrivacy(
+    String userId,
+    ChangeUserPrivacy user,
+  ) async {
+    final response = await api.put(
+      '$_baseUrl/changePrivacy/$userId',
+      data: user.toJson(),
+    );
 
     return response.statusCode! < 400
         ? Result.success(value: UserResponse.fromJson(response.data))

@@ -10,7 +10,9 @@ import 'package:work_env_mobile/domain/enums/privacy.dart';
 import 'package:work_env_mobile/domain/text_formatters/cpf_cnpj_formatter.dart';
 import 'package:work_env_mobile/domain/text_formatters/date_formater.dart';
 import 'package:work_env_mobile/front/components/create_account_input_text.dart';
+import 'package:work_env_mobile/services/date_parser.dart';
 import 'package:work_env_mobile/services/validator_service.dart';
+import 'package:work_env_mobile/view_models/create_user_view_model.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -20,6 +22,9 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
+  final _createUserViewModel = locator<CreateUserViewModel>();
+  final _dateParser = locator<DateParser>();
+
   bool isPasswordVisible = false;
   final form = GlobalKey<FormState>();
   final _nameController = TextEditingController();
@@ -50,21 +55,65 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     });
   }
 
-  void _sendForms() {
+  void _sendForms() async {
     _validateAllFields();
 
     if (_validationService.isValid(_fieldValues)) {
-      log('Form is valid, sending data...');
-      // ScaffoldMessenger.of(
-      //   context,
-      // ).showSnackBar(SnackBar(content: Text('Processing Data')));
-    } else {
-      log('Form is invalid, not sending data...');
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Please fill all fields correctly')),
-      //   // TODO: learn about SnackBar and customize it.
-      // );
+
+    final result = await _createUserViewModel.registerUser(
+      name: _nameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+      cpfOrCnpj: _cpjOrCnpjController.text,
+      birthDate: _dateParser.parseFromDMY(_dateBirthController.text),
+      privacy: accountPrivacy,
+      profilePicture: _profilePictureController.text,
+      personalDescription: _descriptionController.text,
+    );
+
+    // TODO: test user register and add error handling from api
+
+    // Avoid dispose widget problems on async functions
+      if (!mounted) return;
+
+      if (result.isSuccess) {
+        _showSuccessSnackBar();
+
+        await Future.delayed(Duration(seconds: 3));
+        
+        _redirectToLoginPage();
+      } else {
+        _showFailureSnackBar();
+      }
     }
+  }
+
+  void _showSuccessSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'User created successfully, redirecting to login page!',
+          style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
+        ),
+        backgroundColor: Color.fromRGBO(74, 166, 240, 1),
+      ),
+    );
+  }
+
+  void _showFailureSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Error on creating user, try again later.',
+          style: GoogleFonts.poppins(color: Colors.white),
+        ),
+        backgroundColor: Colors.redAccent,
+      ),
+    );
+  }
+
+  void _redirectToLoginPage() {
+    Navigator.of(context).pushReplacementNamed('/login');
   }
 
   @override

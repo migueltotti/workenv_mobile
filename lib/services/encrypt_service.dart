@@ -1,7 +1,7 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 
-class EncryptService {
+class CryptoService {
   final String _publicKeyPem = '''-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDllAEPNkAouxLkUWdzgdJHrG7X
 E3uslq7tKqFuJCg7Enr1FC8wYt6Qjmd1/QBpCPWdVVHppflZXLZoKfCaoCcs7DHm
@@ -10,16 +10,13 @@ v49N0Q88YP6rbu64AQIDAQAB
 -----END PUBLIC KEY-----''';
   late final RSAPublicKey _publicKey;
 
-  EncryptService() {
+  CryptoService() {
     _publicKey = parsePublicKeyFromPem(_publicKeyPem);
   }
 
   String encrypt(String data) {
     final encrypter = Encrypter(
-      RSA(
-        publicKey: _publicKey,
-        encoding: RSAEncoding.PKCS1
-      ),
+      RSA(publicKey: _publicKey, encoding: RSAEncoding.PKCS1),
     );
     return encrypter.encrypt(data).base64;
   }

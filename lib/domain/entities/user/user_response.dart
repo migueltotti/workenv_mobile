@@ -1,16 +1,22 @@
+import 'package:work_env_mobile/domain/enums/privacy.dart';
+
 class UserResponse {
   String userId;
   String name;
   String email;
-  String cpfCnpj;
   DateTime dateBirth;
+  String profilePicture;
+  Privacy privacy;
+  String personalDescription;
 
   UserResponse({
     required this.userId,
     required this.name,
     required this.email,
-    required this.cpfCnpj,
     required this.dateBirth,
+    required this.profilePicture,
+    required this.privacy,
+    required this.personalDescription,
   });
 
   factory UserResponse.fromJson(Map<String, dynamic> json) {
@@ -18,8 +24,10 @@ class UserResponse {
       userId: json['userId'] as String,
       name: json['name'] as String,
       email: json['email'] as String,
-      cpfCnpj: json['cpfCnpj'] as String,
       dateBirth: DateTime.parse(json['dateBirth'] as String),
+      profilePicture: json['profilePicture'] as String,
+      privacy: Privacy.fromIntValue(json['privacy'] as int),
+      personalDescription: json['personalDescription'] as String
     );
   }
 
@@ -28,8 +36,10 @@ class UserResponse {
       "userId": userId,
       "name": name,
       "email": email,
-      "cpfCnpj": cpfCnpj,
       "dateBirth": dateBirth.toIso8601String(),
+      "profilePicture": profilePicture,
+      "privacy": privacy.value,
+      "personalDescription": personalDescription
     };
   }
 }

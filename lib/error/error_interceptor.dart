@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:work_env_mobile/error/exceptions/app_exception.dart';
 import 'package:work_env_mobile/error/exceptions/dio_exepctions/cancel_exception.dart';
@@ -12,45 +13,78 @@ import 'package:work_env_mobile/error/exceptions/http_exceptions/server_exceptio
 import 'package:work_env_mobile/error/exceptions/http_exceptions/unauthorized_exception.dart';
 import 'package:work_env_mobile/error/exceptions/http_exceptions/validation_exception.dart';
 
-class ErrorInterceptor extends Interceptor{
+class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    AppException exception;
+    // Log para debug
+    log("ErrorInterceptor - Type: ${err.type}, Message: ${err.message}");
+    log("ErrorInterceptor - StatusCode: ${err.response?.statusCode}");
+    
+    try {
+      AppException exception = _createAppException(err);
+      
+      // Mantém todas as propriedades originais da DioException
+      handler.reject(DioException(
+        requestOptions: err.requestOptions,
+        response: err.response, // IMPORTANTE: Manter a response original
+        error: exception,
+        type: err.type,
+        message: exception.message,
+        stackTrace: err.stackTrace,
+      ));
+    } catch (e) {
+      // Se algo der errado no interceptor, passa o erro original
+      log("ErrorInterceptor failed: $e");
+      handler.next(err);
+    }
+  }
 
+  AppException _createAppException(DioException err) {
     switch (err.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        exception = TimeoutException('Timeout na conexão');
-        break;
+        return TimeoutException('Timeout na conexão');
         
       case DioExceptionType.badResponse:
-        exception = _handleStatusCode(err);
-        break;
+        return _handleStatusCode(err);
         
       case DioExceptionType.connectionError:
-        exception = NetworkException('Erro de conexão');
-        break;
+        return NetworkException('Erro de conexão');
         
       case DioExceptionType.cancel:
-        exception = CancelException('Requisição cancelada');
-        break;
+        return CancelException('Requisição cancelada');
+        
+      case DioExceptionType.unknown:
+        return UnknownException('Erro desconhecido: ${err.message ?? "Falha na conexão"}');
+        
+      case DioExceptionType.badCertificate:
+        return NetworkException('Certificado SSL inválido');
         
       default:
-        exception = UnknownException('Erro desconhecido: ${err.message}');
+        return UnknownException('Tipo de erro não mapeado: ${err.type}');
     }
-    
-    // Rejeita com nossa exceção customizada
-    handler.reject(DioException(
-      requestOptions: err.requestOptions,
-      error: exception,
-      type: err.type,
-    ));
   }
 
   AppException _handleStatusCode(DioException err) {
     final statusCode = err.response?.statusCode;
-    final message = err.response?.data?['message'] ?? 'Erro no servidor';
+    
+    // Tratamento mais seguro dos dados da resposta
+    String message = err.response!.data;
+    dynamic errors;
+    
+    try {
+      final responseData = err.response?.data;
+      if (responseData is Map<String, dynamic>) {
+        message = responseData['message']?.toString() ?? message;
+        errors = responseData['errors'];
+      } else if (responseData is String) {
+        message = responseData;
+      }
+    } catch (e) {
+      log("Erro ao processar response data: $e");
+      // Mantém mensagem padrão se não conseguir processar
+    }
     
     switch (statusCode) {
       case 400:
@@ -63,7 +97,7 @@ class ErrorInterceptor extends Interceptor{
       case 404:
         return NotFoundException('Recurso não encontrado');
       case 422:
-        return ValidationException(message, err.response?.data?['errors']);
+        return ValidationException(message, errors);
       case 500:
         return ServerException('Erro interno do servidor');
       default:
@@ -72,9 +106,9 @@ class ErrorInterceptor extends Interceptor{
   }
   
   void _handleUnauthorized() {
-    //locator<AuthService>().logout();
+    // locator<AuthService>().logout();
     // try refreshToken login
     // navigate to login page if refreshToken login fails
-    //locator<NavigationService>().pushAndRemoveUntil('/login');
+    // locator<NavigationService>().pushAndRemoveUntil('/login');
   }
 }
