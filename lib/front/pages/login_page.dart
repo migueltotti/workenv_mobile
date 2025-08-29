@@ -6,8 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:work_env_mobile/depency_injection_config/dependency_injection.dart';
 import 'package:work_env_mobile/front/components/login_input_text_field.dart';
 import 'package:work_env_mobile/front/components/social_media_icon_button.dart';
-import 'package:work_env_mobile/services/auth_service.dart';
-import 'package:work_env_mobile/services/encrypt_service.dart';
+import 'package:work_env_mobile/front/pages/after_login_page.dart';
+import 'package:work_env_mobile/services/implementations/auth_service.dart';
+import 'package:work_env_mobile/services/implementations/encrypt_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -51,6 +52,9 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.isSuccess) {
         Navigator.of(context).pushReplacementNamed('/home');
+        // Navigator.of(context).pushReplacement(
+        //   MaterialPageRoute(builder: (context) => AfterLoginPage()),
+        // );
       } else {
         log('Login failed with status: ${response.error}');
       }

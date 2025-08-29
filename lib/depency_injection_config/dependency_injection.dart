@@ -3,18 +3,20 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:work_env_mobile/error/error_interceptor.dart';
-import 'package:work_env_mobile/services/auth_service.dart';
-import 'package:work_env_mobile/services/date_parser.dart';
-import 'package:work_env_mobile/services/encrypt_service.dart';
-import 'package:work_env_mobile/services/user_service.dart';
-import 'package:work_env_mobile/services/validator_service.dart';
+import 'package:work_env_mobile/services/abstractions/jwt_decoder.dart';
+import 'package:work_env_mobile/services/implementations/auth_service.dart';
+import 'package:work_env_mobile/services/implementations/date_parser.dart';
+import 'package:work_env_mobile/services/implementations/encrypt_service.dart';
+import 'package:work_env_mobile/services/implementations/jwtdecoder_service.dart';
+import 'package:work_env_mobile/services/implementations/user_service.dart';
+import 'package:work_env_mobile/services/implementations/validator_service.dart';
 import 'package:work_env_mobile/validations/abstract_validator.dart';
 import 'package:work_env_mobile/validations/cpf_cnpj_validator.dart';
 import 'package:work_env_mobile/validations/email_validator.dart';
 import 'package:work_env_mobile/validations/name_validator.dart';
 import 'package:work_env_mobile/validations/password_validator.dart';
-import 'package:work_env_mobile/view_models/create_user_view_model.dart';
+import 'package:work_env_mobile/view_models/create_user_viewmodel.dart';
+import 'package:work_env_mobile/view_models/home_viewmodel.dart';
 
 final locator = GetIt.instance;
 
@@ -79,16 +81,19 @@ void setupDepencyInjection() {
 
   // Register Services
   locator.registerFactory<UserService>(() => UserService(locator<Dio>()));
-  locator.registerFactory<AuthService>(() => AuthService(locator<Dio>()));
+  locator.registerLazySingleton<AuthService>(() => AuthService(locator<Dio>()));
   locator.registerLazySingleton<CryptoService>(() => CryptoService());
   locator.registerLazySingleton<ValidationService>(
     () => ValidationService(locator<List<IValidator>>()),
   );
-  locator.registerLazySingleton<DateParser>(() => DateParser());
+  locator.registerFactory<DateParser>(() => DateParser());
+  locator.registerFactory<JwtDecoderAbstraction>(() => JwtDecoderImpl());
 
   // Register ViewModels
   locator.registerFactory<CreateUserViewModel>(() => 
     CreateUserViewModel(locator<UserService>(), locator<CryptoService>()));
+  locator.registerFactory<HomeViewModel>(() => 
+    HomeViewModel(locator<JwtDecoderAbstraction>(), locator<AuthService>()));
 }
 
 class LogInterceptor extends Interceptor {

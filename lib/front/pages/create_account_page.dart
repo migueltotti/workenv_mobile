@@ -1,7 +1,4 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,9 +7,9 @@ import 'package:work_env_mobile/domain/enums/privacy.dart';
 import 'package:work_env_mobile/domain/text_formatters/cpf_cnpj_formatter.dart';
 import 'package:work_env_mobile/domain/text_formatters/date_formater.dart';
 import 'package:work_env_mobile/front/components/create_account_input_text.dart';
-import 'package:work_env_mobile/services/date_parser.dart';
-import 'package:work_env_mobile/services/validator_service.dart';
-import 'package:work_env_mobile/view_models/create_user_view_model.dart';
+import 'package:work_env_mobile/services/implementations/date_parser.dart';
+import 'package:work_env_mobile/services/implementations/validator_service.dart';
+import 'package:work_env_mobile/view_models/create_user_viewmodel.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -328,7 +325,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   onPressed: () => {_sendForms()},
                   child: Text(
-                    'Sign in',
+                    'Sign up',
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w500,
                       fontSize: 20,

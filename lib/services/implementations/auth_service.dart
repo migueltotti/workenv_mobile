@@ -2,41 +2,33 @@ import 'package:dio/dio.dart';
 import 'package:work_env_mobile/domain/result/result.dart';
 
 class AuthService {
-  static String? token;
-  static String? refreshToken;
-  static DateTime? refreshTokenExpireAt;
+  static String? _token;
+  static String? _refreshToken;
+  static DateTime? _refreshTokenExpireAt;
   final Dio _api;
 
   AuthService(this._api);
 
+  String? get token => _token;
+  String? get refreshToken => _refreshToken;
+  DateTime? get refreshTokenExpiration => _refreshTokenExpireAt;
+
   static void setToken(String newToken) {
-    token = newToken;
-  }
-
-  static String? getToken() {
-    return token;
-  }
-
-  static void clearToken() {
-    token = null;
+    _token = newToken;
   }
 
   static void setRefreshToken(String newRefreshToken, DateTime expireAt) {
-    refreshToken = newRefreshToken;
-    refreshTokenExpireAt = expireAt;
+    _refreshToken = newRefreshToken;
+    _refreshTokenExpireAt = expireAt;
   }
 
-  static String? getRefreshToken() {
-    return refreshToken;
-  }
-
-  static DateTime? getRefreshTokenExpiration() {
-    return refreshTokenExpireAt;
+  static void clearToken() {
+    _token = null;
   }
 
   static void clearRefreshToken() {
-    refreshToken = null;
-    refreshTokenExpireAt = null;
+    _refreshToken = null;
+    _refreshTokenExpireAt = null;
   }
 
   Future<ResultVoid> login(String email, String encryptedPassword) async {

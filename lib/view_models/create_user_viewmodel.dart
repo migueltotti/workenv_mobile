@@ -1,10 +1,9 @@
-import 'package:work_env_mobile/depency_injection_config/dependency_injection.dart';
 import 'package:work_env_mobile/domain/entities/user/user_request.dart';
 import 'package:work_env_mobile/domain/entities/user/user_response.dart';
 import 'package:work_env_mobile/domain/enums/privacy.dart';
 import 'package:work_env_mobile/domain/result/result.dart';
-import 'package:work_env_mobile/services/encrypt_service.dart';
-import 'package:work_env_mobile/services/user_service.dart';
+import 'package:work_env_mobile/services/implementations/encrypt_service.dart';
+import 'package:work_env_mobile/services/implementations/user_service.dart';
 
 class CreateUserViewModel {
   final UserService _userService;

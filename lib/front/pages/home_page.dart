@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:work_env_mobile/depency_injection_config/dependency_injection.dart';
 import 'package:work_env_mobile/front/components/event_card.dart';
 import 'package:work_env_mobile/front/components/task_card.dart';
 import 'package:work_env_mobile/front/components/today_summary_card.dart';
+import 'package:work_env_mobile/view_models/home_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,9 +15,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final homeViewModel = locator<HomeViewModel>();
+  
   bool hasNotifications = true;
+  String userName = '';
 
-  bool isFirstTaskCompleted = false;
+  @override
+  void initState() {
+    super.initState();
+    userName = homeViewModel.getLoggedUserName();
+  }
 
   Widget indicateNotifications() {
     return hasNotifications
@@ -85,13 +94,13 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Miguel Totti',
+                            userName,
                             style: GoogleFonts.inter(
                               color: Colors.black,
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                             ),
-                          ),
+                          )
                         ],
                       ),
                       Stack(

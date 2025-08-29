@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:work_env_mobile/domain/entities/user/change_birth_date_request.dart';
@@ -54,44 +52,6 @@ class UserService {
         ? Result.success(value: UserResponse.fromJson(response.data))
         : Result.failure(error: response.data);
   }
-
-  Future<dynamic> createUserVoid(UserRequest user) async {
-    try {
-    // Teste com dados hardcoded simples
-      final simpleData = {
-        "name": "Test",
-        "email": "test@test.com", 
-        "password": "123",
-        "cpfCnpj": "123",
-        "dateBirth": "2025-01-01T00:00:00.000Z",
-        "profilePicture": "test",
-        "personalDescription": "test",
-        "privacy": 1
-      };
-      
-      log("Testing with simple data: $simpleData");
-      
-      final response = await api.post(_baseUrl, data: simpleData);
-      log("SUCCESS with simple data");
-      
-    } catch (e) {
-      log("ERROR with simple data: $e");
-    }
-  }
-
-  Future<void> testConnection() async {
-    try {
-      final response = await api.get<List>('/Users'); // ou qualquer rota GET
-      log("Connection test SUCCESS: ${response.statusCode}");
-    } catch (e) {
-      log("Connection test FAILED: $e");
-    }
-  }
-
-
-
-
-  
 
   Future<Result<UserResponse>> changeName(
     String userId,
